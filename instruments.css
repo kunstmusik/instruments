@@ -4,8 +4,11 @@
 
 body {
   padding-top: 5rem;
-  padding-bottom: 5rem;
   color: #5a5a5a;
+}
+
+footer {
+  padding-top: 5rem;
 }
 
 
