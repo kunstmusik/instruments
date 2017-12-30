@@ -2,7 +2,7 @@
 <html lang="en">
 
   <head>
-    <title>instruments - kunstmusik.com</title>
+    <title>instruments.kunstmusik.com</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,13 +12,52 @@
     <!--<meta property="og:image" content="http://live.csound.com/web/og_image.png" />-->
     <meta property="og:url" content="http://instruments.kunstmusik.com/index.html"/>
 
+    <!-- CDN Version of Bootstrap and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="instruments.css">
+
   </head>
 
-  <body>
-    <h1>instruments.kunstmusik.com</h1>
-    <div>
-      <a href="mt0/index.html">instr1:mt0</a>
+<body data-spy="scroll" data-target=".navbar" data-offset="50" >
+
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="/">instruments.kunstmusik.com</a>
+  </nav>
+
+
+<div class="container main">
+
+
+<div class="row">
+  <div class="col mx-auto" align="center">
+    <p class="display-4">About</p>
+
+<p>Instruments for live performance of improvised and composed music. Free and Open Source, built with HTML5 and Csound.</p>
+
+<a class="btn btn-lg btn-primary" href="https://github.com/kunstmusik/instruments">Sourcecode (GitHub)</a>
+
+  </div>
+</div>
+
+<hr class="featurette-divider" id="documentation"/>
+
+<div class="row">
+  <div class="col-4">
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">mt0</h5>
+        <p class="card-text">Classic Multi-Touch Instrument. Based upon instrument designed for Csound for iOS and Android SDKs.</p>
+        <p class="card-text"><b>Requirements:</b> Browser that supports HTML5, Javascript, WebAssembly. Hardware with Touch-capable screen.</p>
+        <a href="mt0/index.html" class="btn btn-primary">Open</a>
+      </div>
     </div>
-  </body>
+  </div>
+</div>
+
+</div>
+
 
 </html>
