@@ -14,7 +14,7 @@ function resizeTouchPanel() {
 }
 resizeTouchPanel();
 
-function drawTouches() {
+function drawTouchesImpl(ts) {
   if(touchPanel.getContext) {
     let ctx = touchPanel.getContext("2d");
 
@@ -44,6 +44,10 @@ function drawTouches() {
         1 - (t.y / h));
     }
   }
+}
+
+function drawTouches() {
+  window.requestAnimationFrame(drawTouchesImpl);
 }
 
 function touchStart(evt) {
@@ -133,3 +137,8 @@ window.oncontextmenu = function(event) {
      event.stopPropagation();
      return false;
 };
+
+// Disable touch scrolling
+document.body.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+}, false); 
