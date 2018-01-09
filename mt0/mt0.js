@@ -123,13 +123,7 @@ function onRuntimeInitialized() {
 }
 
 
-// Initialize Module before WASM loads
 
-Module = {};
-Module['wasmBinaryFile'] = 'wasm/libcsound.wasm';
-Module['print'] = console.log;
-Module['printErr'] = console.log;
-Module['onRuntimeInitialized'] = onRuntimeInitialized;
 
 // Disable Context Menu
 window.oncontextmenu = function(event) {
@@ -142,3 +136,31 @@ window.oncontextmenu = function(event) {
 document.body.addEventListener('touchmove', function(event) {
     event.preventDefault();
 }, false); 
+
+
+function load_script(src, async) {
+  var script = document.createElement('script');
+  script.src = src;
+  script.async = async;
+  document.head.appendChild(script);
+}
+
+// Initialize Module before WASM loads
+Module = {};
+Module['wasmBinaryFile'] = 'wasm/libcsound.wasm';
+Module['print'] = console.log;
+Module['printErr'] = console.log;
+Module['onRuntimeInitialized'] = onRuntimeInitialized;
+
+if(typeof WebAssembly !== undefined) {
+  console.log("Using WASM Csound...");
+  load_script("wasm/libcsound.js", false);
+  load_script("wasm/FileList.js", false);
+  load_script("wasm/CsoundObj.js", false);
+} else {
+  console.log("Using asm.js Csound...");
+  Module['memoryInitializerPrefixURL'] = "asmjs/";
+  load_script("asmjs/libcsound.js", false);
+  load_script("asmjs/FileList.js", false);
+  load_script("asmjs/CsoundObj.js", false);
+}
