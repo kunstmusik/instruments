@@ -59,7 +59,7 @@ function touchStart(evt) {
 
   for (var i = 0; i < changedTouches.length; i++) {
     let t = changedTouches[i];
-    let id = Math.abs(t.identifier);
+    let id = t.identifier;
     touches[id] = {x: t.clientX, y: t.clientY};
     cs.readScore("i1." + id + " 0 -1 " + id); 
     cs.setControlChannel("touch." + id + ".x", 
@@ -75,9 +75,8 @@ function touchEnd(evt) {
   var changedTouches = evt.changedTouches;
   for (var i = 0; i < changedTouches.length; i++) {
     let t = changedTouches[i];
-    let id = Math.abs(t.identifier);
-    cs.readScore("i-1." + id +" 0 1");
-    delete touches[id];
+    cs.readScore("i-1." + t.identifier +" 0 1");
+    delete touches[t.identifier];
   }
   drawTouches();
 }
@@ -87,8 +86,7 @@ function touchMove(evt) {
   var changedTouches = evt.changedTouches;
   for (var i = 0; i < changedTouches.length; i++) {
 		let t = changedTouches[i];
-    let id = Math.abs(t.identifier);
-    let pt = touches[id];
+    let pt = touches[t.identifier];
     pt.x = t.clientX;
     pt.y = t.clientY;
   }
