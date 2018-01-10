@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 var csound = (function() {
     var Csound = null;
@@ -460,11 +460,13 @@ var csound = (function() {
         GetScoreTime: GetScoreTime,
         getScoreTime: GetScoreTime,
         GetTableData: GetTableData,
+        Message: message,
         message: message,
         MIDIin: MIDIin,
         NoteOff: NoteOff,
         NoteOn: NoteOn,
         Pause: Pause,
+        Perform: Play,
         perform: Play,
         PitchBend: PitchBend,
         Play: Play,
@@ -477,15 +479,19 @@ var csound = (function() {
         RequestChannel: RequestChannel,
         RequestFileFromLocal: RequestFileFromLocal,
         RequestTable: RequestTable,
+        Reset: reset,
         reset: reset,
         SetChannel: SetChannel,
+        SetControlChannel: SetChannel,
         setControlChannel: SetChannel,
         SetStringChannel: SetStringChannel,
         setStringChannel: SetStringChannel,
         SetTable: SetTable,
         StartInputAudio: StartInputAudio,
+        // TODO: Ambiguous and must be resolved.
         start: start,
         Start: Play,
+        Stop: Stop,
         stop: Stop,
         updateStatus: updateStatus
     };
