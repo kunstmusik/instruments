@@ -53,6 +53,10 @@ function drawTouches() {
 function touchStart(evt) {
   evt.preventDefault();
 
+  // start it here to make it
+  // work for iOS 11
+  cs.start();
+
   var changedTouches = evt.changedTouches;   
   let w = touchPanel.parentNode.clientWidth;
   let h = touchPanel.parentNode.clientHeight;
@@ -107,7 +111,10 @@ function onRuntimeInitialized() {
       "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\n" + 
     txt);
     //cs.compileCSD(editor.getValue());
-    cs.start();
+
+    // moving start to on touch to address
+    // WebAudio being paused on iOS 11 
+    //cs.start();
     var ld = document.getElementById("loadDiv");
     if(ld != null) {
       ld.remove();
