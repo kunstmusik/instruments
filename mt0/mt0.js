@@ -152,12 +152,13 @@ Module['print'] = console.log;
 Module['printErr'] = console.log;
 Module['onRuntimeInitialized'] = onRuntimeInitialized;
 
-// https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
-var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-var ios = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream; 
+//// https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
+//var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+//var ios = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream; 
 
 
-if(!ios && (typeof WebAssembly !== undefined)) {
+//if(!ios && (typeof WebAssembly !== undefined)) {
+if(typeof WebAssembly !== undefined) {
   console.log("Using WASM Csound...");
   load_script("wasm/libcsound.js", false);
   load_script("wasm/FileList.js", false);
