@@ -169,6 +169,9 @@ Module['wasmBinaryFile'] = 'wasm/libcsound.wasm';
 Module['print'] = console.log;
 Module['printErr'] = console.log;
 Module['onRuntimeInitialized'] = onRuntimeInitialized;
+if(iOS) {
+  Module['TOTAL_MEMORY'] = 65536 * 1024 * 2; 
+}
 
 if(typeof WebAssembly !== undefined) {
   console.log("Using WASM Csound...");
