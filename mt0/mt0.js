@@ -1,6 +1,10 @@
 var touches = {};
 var cs;
 
+
+var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+var iOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream; 
+
 const touchPanel = document.getElementById("touchPanel");
 
 function resizeTouchPanel() {
@@ -52,10 +56,6 @@ function drawTouches() {
 
 function touchStart(evt) {
   evt.preventDefault();
-
-  // start it here to make it
-  // work for iOS 11
-  cs.start();
 
   var changedTouches = evt.changedTouches;   
   let w = touchPanel.parentNode.clientWidth;
@@ -112,12 +112,22 @@ function onRuntimeInitialized() {
     txt);
     //cs.compileCSD(editor.getValue());
 
-    // moving start to on touch to address
-    // WebAudio being paused on iOS 11 
-    //cs.start();
+
     var ld = document.getElementById("loadDiv");
-    if(ld != null) {
-      ld.remove();
+
+    if(iOS) {
+
+      ld.innerHTML = "Tap to start Csound";
+      ld.addEventListener ("click", function() {
+         cs.start(); 
+         ld.remove();
+      });
+    } else {
+      cs.start();
+
+      if(ld != null) {
+        ld.remove();
+      }
     }
     touchPanel.addEventListener("touchstart", touchStart, false);
     touchPanel.addEventListener("touchmove", touchMove, false);
@@ -159,12 +169,6 @@ Module['print'] = console.log;
 Module['printErr'] = console.log;
 Module['onRuntimeInitialized'] = onRuntimeInitialized;
 
-//// https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
-//var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-//var ios = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream; 
-
-
-//if(!ios && (typeof WebAssembly !== undefined)) {
 if(typeof WebAssembly !== undefined) {
   console.log("Using WASM Csound...");
   load_script("wasm/libcsound.js", false);
