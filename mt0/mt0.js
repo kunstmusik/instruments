@@ -105,35 +105,34 @@ function onRuntimeInitialized() {
   client.onreadystatechange = function() {
     var txt = client.responseText;
 
-    var loadCsObj = function() {
+    var finishLoadCsObj = function() {
       cs = new CsoundObj();
       cs.setOption("-m0");
       cs.compileOrc(
         "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\n" + 
       txt);
       cs.start(); 
+
+      if(ld != null) {
+        ld.remove();
+      }
+
+      touchPanel.addEventListener("touchstart", touchStart, false);
+      touchPanel.addEventListener("touchmove", touchMove, false);
+      touchPanel.addEventListener("touchend", touchEnd, false);
     }
 
 
     var ld = document.getElementById("loadDiv");
 
     if(iOS) {
-
       ld.innerHTML = "Tap to start Csound";
       ld.addEventListener ("click", function() {
-        loadCsObj();
-        ld.remove();
+        finishLoadCsObj();
       });
     } else {
-      loadCsObj();
-
-      if(ld != null) {
-        ld.remove();
-      }
+      finishLoadCsObj();
     }
-    touchPanel.addEventListener("touchstart", touchStart, false);
-    touchPanel.addEventListener("touchmove", touchMove, false);
-    touchPanel.addEventListener("touchend", touchEnd, false);
     
     setInterval(resizeTouchPanel, 200); 
   }
