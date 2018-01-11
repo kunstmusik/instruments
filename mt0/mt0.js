@@ -170,7 +170,7 @@ Module['print'] = console.log;
 Module['printErr'] = console.log;
 Module['onRuntimeInitialized'] = onRuntimeInitialized;
 
-if(typeof WebAssembly !== undefined) {
+if(!iOS && (typeof WebAssembly !== undefined)) {
   console.log("Using WASM Csound...");
   load_script("wasm/libcsound.js", false);
   load_script("wasm/FileList.js", false);
