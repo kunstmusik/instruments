@@ -122,6 +122,7 @@ var CsoundObj = function() {
     };
 
     var audioContext = getAudioContext();
+    this.audioContext = audioContext;
     var samplerate = audioContext.sampleRate;
     var compiled = false;
 

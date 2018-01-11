@@ -112,6 +112,7 @@ function onRuntimeInitialized() {
         "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\n" + 
       txt);
       cs.start(); 
+      cs.audioContext.resume();
 
       if(ld != null) {
         ld.remove();
