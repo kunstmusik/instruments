@@ -1,4 +1,14 @@
-var touches = {};
+var touchIds = new Array(10); 
+var touches = new Array(10); 
+var touchArray = new Array(10); 
+
+for(var i = 0; i < 10; i++) {
+  touchIds[i] = 0;
+  touches[i] = {x: -100, y: -100};
+  touchArray[i] = null; 
+}
+
+
 var cs;
 
 
@@ -24,7 +34,6 @@ function drawTouchesImpl(ts) {
 
     let w = touchPanel.parentNode.clientWidth;
     let h = touchPanel.parentNode.clientHeight;
-    let keys = Object.keys(touches);
 
     // clear screen
     ctx.clearRect(0, 0, w, h);
@@ -37,15 +46,15 @@ function drawTouchesImpl(ts) {
     // draw touches
     ctx.fillStyle = 'green';
 
-    for(var i = 0; i < keys.length; i++) {
-      let id = keys[i];
-      let t = touches[id];
-      ctx.fillRect(t.x - 10, t.y - 10, 20, 20);
-
-      cs.setControlChannel("touch." + id + ".x", 
-        t.x / w);
-      cs.setControlChannel("touch." + id + ".y", 
-        1 - (t.y / h));
+    for(var i = 0; i < 10; i++) {
+      let t = touches[i];
+      if(t.x >=0 && t.y >= 0) {
+        ctx.fillRect(t.x - 10, t.y - 10, 20, 20);
+        cs.setControlChannel("touch." + i + ".x", 
+          t.x / w);
+        cs.setControlChannel("touch." + i + ".y", 
+          1 - (t.y / h));
+      }
     }
   }
 }
@@ -53,6 +62,27 @@ function drawTouchesImpl(ts) {
 function drawTouches() {
   window.requestAnimationFrame(drawTouchesImpl);
 }
+
+
+function getTouchIdAssignment() { 
+	for (var i = 0; i < 10; i++) {
+		if (touchIds[i] == 0) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+function getTouchId(t) {
+	for (var i = 0; i < 10; i++) {
+		if (touchArray[i] != null && 
+        touchArray[i].identifier == t.identifier) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 
 function touchStart(evt) {
   evt.preventDefault();
@@ -62,25 +92,22 @@ function touchStart(evt) {
   let h = touchPanel.parentNode.clientHeight;
 
   for (var i = 0; i < changedTouches.length; i++) {
-    let t = changedTouches[i];
-    let id = t.identifier;
-    touches[id] = {x: t.clientX, y: t.clientY};
-    cs.readScore("i1." + id + " 0 -1 " + id); 
-    cs.setControlChannel("touch." + id + ".x", 
-      t.clientX / w);
-    cs.setControlChannel("touch." + id + ".y", 
-      1 - (t.clientY / h));
-  }
-  drawTouches();
-}
+    var touchId = getTouchIdAssignment();
+    if (touchId != -1) {
+      let t = changedTouches[i];
+      touchArray[touchId] = t;
+      touchIds[touchId] = 1;
+      let xy = touches[touchId];
+      xy.x = t.clientX;
+      xy.y = t.clientY;
 
-function touchEnd(evt) {
-  evt.preventDefault();
-  var changedTouches = evt.changedTouches;
-  for (var i = 0; i < changedTouches.length; i++) {
-    let t = changedTouches[i];
-    cs.readScore("i-1." + t.identifier +" 0 1");
-    delete touches[t.identifier];
+      let score = "i1." + touchId + " 0 -1 " + touchId;
+      cs.readScore(score); 
+      cs.setControlChannel("touch." + touchId + ".x", 
+        t.clientX / w);
+      cs.setControlChannel("touch." + touchId + ".y", 
+        1 - (t.clientY / h));
+    }
   }
   drawTouches();
 }
@@ -90,9 +117,32 @@ function touchMove(evt) {
   var changedTouches = evt.changedTouches;
   for (var i = 0; i < changedTouches.length; i++) {
 		let t = changedTouches[i];
-    let pt = touches[t.identifier];
-    pt.x = t.clientX;
-    pt.y = t.clientY;
+
+    var touchId = getTouchId(t);
+    if(touchId != -1) {
+      let pt = touches[touchId];
+      pt.x = t.clientX;
+      pt.y = t.clientY;
+    }
+  }
+  drawTouches();
+}
+
+
+function touchEnd(evt) {
+  evt.preventDefault();
+  var changedTouches = evt.changedTouches;
+  for (var i = 0; i < changedTouches.length; i++) {
+    var touchId = getTouchId(changedTouches[i]);
+    if(touchId != -1) {
+			touchIds[touchId] = 0;
+			touchArray[touchId] = null;
+      let t = changedTouches[i];
+      cs.readScore("i-1." + touchId +" 0 1");
+      let xy = touches[touchId];
+      xy.x = -100;
+      xy.y = -100;
+    }
   }
   drawTouches();
 }
