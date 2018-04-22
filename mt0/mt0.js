@@ -30,24 +30,25 @@ function drawTouchesImpl(ts) {
     // clear screen
     ctx.clearRect(0, 0, w, h);
 
-    //// draw info text
-    //ctx.fillStyle = '#0f0f0f';
-    //ctx.font = '24px Monospace';
-    //ctx.fillText("mt0 - 2017.12.28", 48, 60);
-   
     // draw touches
     ctx.fillStyle = 'green';
+    ctx.strokeStyle = 'white';
 
     for(var i = 0; i < 10; i++) {
       let t = touchArray[i];
       if(t != null) {
-        ctx.fillRect(t.clientX - 10, t.clientY - 10, 20, 20);
+        ctx.beginPath();
+        ctx.arc(t.clientX, t.clientY, 20, 0, 2 * Math.PI, true);
+        ctx.fill();
+        ctx.stroke();
+
         cs.setControlChannel("touch." + i + ".x", 
           t.clientX / w);
         cs.setControlChannel("touch." + i + ".y", 
           1 - (t.clientY / h));
       }
     }
+
   }
 }
 
@@ -142,8 +143,9 @@ function onRuntimeInitialized() {
     var finishLoadCsObj = function() {
       cs = new CsoundObj();
       cs.setOption("-m0");
+      cs.setOption("-odac");
       cs.compileOrc(
-        "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\n" + 
+        "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\nnchnls_i=1" + 
       txt);
       cs.start(); 
 
@@ -159,7 +161,7 @@ function onRuntimeInitialized() {
 
     var ld = document.getElementById("loadDiv");
 
-    if(iOS) {
+    if(CSOUND_AUDIO_CONTEXT.state != "running") {
       ld.innerHTML = "Tap to start Csound";
       ld.addEventListener ("click", function() {
         finishLoadCsObj();
@@ -186,7 +188,7 @@ window.oncontextmenu = function(event) {
 
 // Disable touch scrolling
 document.body.addEventListener('touchmove', function(event) {
-    event.preventDefault();
+    //event.preventDefault();
 }, false); 
 
 
