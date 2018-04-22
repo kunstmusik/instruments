@@ -82,6 +82,7 @@ function getTouchId(t) {
 
 function touchStart(evt) {
   evt.preventDefault();
+  CSOUND_AUDIO_CONTEXT.resume();
 
   var changedTouches = evt.changedTouches;   
   let w = touchPanel.parentNode.clientWidth;
@@ -148,7 +149,6 @@ function onRuntimeInitialized() {
         "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\n" + 
       txt);
       cs.start(); 
-      cs.audioContext.resume();
 
       if(ld != null) {
         ld.remove();
@@ -178,8 +178,6 @@ function onRuntimeInitialized() {
 }
 
 
-
-
 // Disable Context Menu
 window.oncontextmenu = function(event) {
      event.preventDefault();
@@ -192,34 +190,6 @@ document.body.addEventListener('touchmove', function(event) {
     event.preventDefault();
 }, false); 
 
-
-function load_script(src, async) {
-  var script = document.createElement('script');
-  script.src = src;
-  script.async = async;
-  document.head.appendChild(script);
-}
-
-function wasmLog(msg) {
-  console.log(msg);
-}
-
-// Initialize Module before WASM loads
-Module = {};
-Module['wasmBinaryFile'] = 'wasm/libcsound.wasm';
-Module['print'] = wasmLog;
-Module['printErr'] = wasmLog;
-Module['onRuntimeInitialized'] = onRuntimeInitialized;
-
-if(!iOS && (typeof WebAssembly !== undefined)) {
-  console.log("Using WASM Csound...");
-  load_script("wasm/libcsound.js", false);
-  load_script("wasm/FileList.js", false);
-  load_script("wasm/CsoundObj.js", false);
-} else {
-  console.log("Using asm.js Csound...");
-  Module['memoryInitializerPrefixURL'] = "asmjs/";
-  load_script("asmjs/libcsound.js", false);
-  load_script("asmjs/FileList.js", false);
-  load_script("asmjs/CsoundObj.js", false);
-}
+CsoundObj.importScripts("../csound/").then(() => {
+  onRuntimeInitialized();
+});

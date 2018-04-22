@@ -7,10 +7,6 @@ for(var i = 0; i < 10; i++) {
 
 var cs;
 
-
-var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-var iOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream; 
-
 const touchPanel = document.getElementById("touchPanel");
 
 function resizeTouchPanel() {
@@ -83,6 +79,8 @@ function getTouchId(t) {
 function touchStart(evt) {
   evt.preventDefault();
 
+  CSOUND_AUDIO_CONTEXT.resume();
+
   var changedTouches = evt.changedTouches;   
   let w = touchPanel.parentNode.clientWidth;
   let h = touchPanel.parentNode.clientHeight;
@@ -148,7 +146,6 @@ function onRuntimeInitialized() {
         "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\n" + 
       txt);
       cs.start(); 
-      cs.audioContext.resume();
 
       if(ld != null) {
         ld.remove();
@@ -193,33 +190,8 @@ document.body.addEventListener('touchmove', function(event) {
 }, false); 
 
 
-function load_script(src, async) {
-  var script = document.createElement('script');
-  script.src = src;
-  script.async = async;
-  document.head.appendChild(script);
-}
 
-function wasmLog(msg) {
-  console.log(msg);
-}
+CsoundObj.importScripts("../csound/").then(() => {
+  onRuntimeInitialized();
+});
 
-// Initialize Module before WASM loads
-Module = {};
-Module['wasmBinaryFile'] = 'wasm/libcsound.wasm';
-Module['print'] = wasmLog;
-Module['printErr'] = wasmLog;
-Module['onRuntimeInitialized'] = onRuntimeInitialized;
-
-if(!iOS && (typeof WebAssembly !== undefined)) {
-  console.log("Using WASM Csound...");
-  load_script("wasm/libcsound.js", false);
-  load_script("wasm/FileList.js", false);
-  load_script("wasm/CsoundObj.js", false);
-} else {
-  console.log("Using asm.js Csound...");
-  Module['memoryInitializerPrefixURL'] = "asmjs/";
-  load_script("asmjs/libcsound.js", false);
-  load_script("asmjs/FileList.js", false);
-  load_script("asmjs/CsoundObj.js", false);
-}
