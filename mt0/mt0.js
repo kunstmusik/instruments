@@ -135,10 +135,9 @@ function touchEnd(evt) {
 // Called when Csound WASM completes loading
 function onRuntimeInitialized() {
   resizeTouchPanel();
-  var client = new XMLHttpRequest();
-  client.open('GET', 'mt0.orc', true);
-  client.onreadystatechange = function() {
-    var txt = client.responseText;
+
+  fetch('mt0.orc').then((response) => {
+    return response.text().then((txt) => {
 
     var finishLoadCsObj = function() {
       cs = new CsoundObj();
@@ -171,8 +170,10 @@ function onRuntimeInitialized() {
     }
     
     setInterval(resizeTouchPanel, 200); 
-  }
-  client.send();
+
+
+    })
+  });
 
 }
 

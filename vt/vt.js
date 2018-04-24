@@ -134,17 +134,15 @@ function touchEnd(evt) {
 // Called when Csound WASM completes loading
 function onRuntimeInitialized() {
   resizeTouchPanel();
-  var client = new XMLHttpRequest();
-  client.open('GET', 'vt.orc', true);
-  client.onreadystatechange = function() {
-    var txt = client.responseText;
+  fetch('vt.orc').then((response) => {
+    return response.text().then((txt) => {
 
     var finishLoadCsObj = function() {
       cs = new CsoundObj();
       cs.setOption("-m0");
       cs.setOption("-odac");
       cs.compileOrc(
-        "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\nnchnls_i=1" +
+        "sr=48000\nksmps=32\n0dbfs=1\nnchnls=2\nnchnls_i=1" + 
       txt);
       cs.start(); 
 
@@ -170,8 +168,10 @@ function onRuntimeInitialized() {
     }
     
     setInterval(resizeTouchPanel, 200); 
-  }
-  client.send();
+
+
+    })
+  });
 
 }
 
