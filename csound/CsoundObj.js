@@ -70,7 +70,7 @@ const csound_load_script = function(src, callback) {
  * This class is designed to be compatible with
  * the previous ScriptProcessorNode-based CsoundObj
  */
-class CsoundObj {
+export default class CsoundObj {
     /** Create a CsoundObj
      * @constructor 
      */
